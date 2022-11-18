@@ -44,7 +44,7 @@ packet reaches router, call processPacket
     - If request, look up in table and return MAC if you know the MAC address
         - We can technically ARP something not on our network. if this is the case, send a reply is MAC is in the table
     - If reply, add mapping to MAC table. 
-        - itterate through packets in queue and send all packets waiting on this MAC address
+        - itterate through packets in queue and send all packets waiting on this MAC address. remove ARP request from queue
 
 - get IP packet
     - add packet to queue
@@ -78,4 +78,19 @@ packet reaches router, call processPacket
         - compare time sent to MAX_TIMES_SEND (5). If too many then remove and drop packets waiting for this request
             - Otherwise, increment time sent and resend
 
- 
+- routing_table
+    - entry
+        - dest IP
+        - next hop IP (GW)
+        - Mask
+        - Interface name
+    - itterate through these and find the longest match
+
+- ACL table
+    - itterate over all entries
+        - if match, return entry
+        - compare priorities
+    - Entry:
+        - estIT&dstMask stcIP&srcMask dstPort srcPort protocol priority rule
+        - care about highest priority 
+        - mask is directly ffff0000
