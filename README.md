@@ -62,11 +62,20 @@ packet reaches router, call processPacket
      - Look up next hop IP. Look at routing table enteries (routing_table.hpp). 
         - dest -> final IP
         - GW -> nexthop IP
-        - mask -> 
+        - mask -> mask that can be & with the IP
         - interface name -> which interface you have to sent it out on
      - Look up next hop IP in ARP cache
         - if not in there
             - queue/cache packet and send ARP request
         - else
-            - forward as normal
-    
+            - forward as normal. recaculate checksum
+
+- ARP Cache
+    - ARP cache enteries 
+        - if anything is older than 30 seconds, time it out (use erase function)
+    - ARP requests (called every second)
+        - Maintain a queue of send and unrecieved ARP requests 
+        - compare time sent to MAX_TIMES_SEND (5). If too many then remove and drop packets waiting for this request
+            - Otherwise, increment time sent and resend
+
+ 
