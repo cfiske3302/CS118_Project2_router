@@ -33,3 +33,40 @@ This is inherited from UCLA CS118 2017 Spring Quarter Project 3 (http://web.cs.u
     ###########################################################
 \n
 naw
+
+
+## Disucssion Notes
+### processPacket:
+packet reaches router, call processPacket
+    prints packet size and Interface rn
+- first, check it is being sent to the correct interface. It the MAC is not the same as the interface, drop, not for us
+- Check if ARP or IP packet.
+    - If request, look up in table and return MAC if you know the MAC address
+        - We can technically ARP something not on our network. if this is the case, send a reply is MAC is in the table
+    - If reply, add mapping to MAC table. 
+        - itterate through packets in queue and send all packets waiting on this MAC address
+
+- get IP packet
+    - add packet to queue
+    - sent ARP request, get reply for the new mapping. Add to ARP cache
+    - on reply, remove all t
+
+- IP packet
+     - Verify Checksum
+        - if issue, then drop the packet. this is not CRC
+     - Match lenght in header to given length (if bad then drop)
+     - IP version check (must be v4) (if not drop)
+     - Perform ACL. verify should not be dropped
+     - Check if destined for the router. if IP is one of router's, drop
+     - Decriment the TTL of packet, it TTL=0, drop (max number of times it can travel, prevent loops)
+     - Look up next hop IP. Look at routing table enteries (routing_table.hpp). 
+        - dest -> final IP
+        - GW -> nexthop IP
+        - mask -> 
+        - interface name -> which interface you have to sent it out on
+     - Look up next hop IP in ARP cache
+        - if not in there
+            - queue/cache packet and send ARP request
+        - else
+            - forward as normal
+    
