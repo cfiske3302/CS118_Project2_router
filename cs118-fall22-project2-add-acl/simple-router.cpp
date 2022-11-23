@@ -28,7 +28,8 @@ void
 SimpleRouter::processPacket(const Buffer& packet, const std::string& inIface)
 {
   std::cerr << "Got packet of size " << packet.size() << " on interface " << inIface << std::endl;
-
+  print_hdrs(packet);
+  print(inIface);
   const Interface* iface = findIfaceByName(inIface);
   if (iface == nullptr) {
     std::cerr << "Received packet, but interface is unknown, ignoring" << std::endl;
